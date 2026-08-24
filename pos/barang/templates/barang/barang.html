@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daftar Barang</title>
+
+    <style>
+        /* =========================
+           RESET
+        ========================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+
+            --danger: #dc2626;
+            --danger-dark: #b91c1c;
+
+            --warning: #d97706;
+            --warning-dark: #b45309;
+
+            --background: #f8fafc;
+            --surface: #ffffff;
+
+            --text: #0f172a;
+            --text-muted: #64748b;
+
+            --border: #e2e8f0;
+
+            --radius: 10px;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background: var(--background);
+            color: var(--text);
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+        .navbar {
+            height: 60px;
+
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 16px;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .store-name {
+            color: var(--primary);
+
+            font-size: 18px;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           MENU DROPDOWN
+        ========================= */
+        .menu {
+            position: relative;
+        }
+
+        .menu__button {
+            width: 40px;
+            height: 40px;
+
+            border: 1px solid var(--border);
+            border-radius: 8px;
+
+            background: var(--surface);
+            color: var(--text);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            list-style: none;
+        }
+
+        /*
+         * Menghilangkan tanda bawaan <summary>
+         */
+        .menu__button::-webkit-details-marker {
+            display: none;
+        }
+
+        .menu__button::marker {
+            display: none;
+        }
+
+        .menu__icon {
+            width: 20px;
+            height: 14px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu__icon span {
+            display: block;
+
+            width: 100%;
+            height: 2px;
+
+            border-radius: 2px;
+
+            background: currentColor;
+        }
+
+        .menu[open] .menu__button {
+            background: #f1f5f9;
+        }
+
+        .menu__dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+
+            width: 210px;
+
+            padding: 6px;
+
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            box-shadow:
+                0 10px 30px rgba(15, 23, 42, 0.10),
+                0 2px 8px rgba(15, 23, 42, 0.05);
+        }
+
+        .menu__link {
+            display: flex;
+            align-items: center;
+
+            min-height: 42px;
+
+            padding: 0 12px;
+
+            border-radius: 7px;
+
+            color: var(--text);
+
+            font-size: 14px;
+        }
+
+        .menu__link:hover {
+            background: #f1f5f9;
+        }
+
+        .menu__divider {
+            height: 1px;
+
+            margin: 6px 4px;
+
+            background: var(--border);
+        }
+
+        .menu__link--danger {
+            color: var(--danger);
+        }
+
+        .menu__link--danger:hover {
+            background: #fef2f2;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+        .main {
+            width: 100%;
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 20px 16px 32px;
+
+            flex: 1;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+
+            margin-bottom: 18px;
+        }
+
+        .page-header__title {
+            font-size: 22px;
+            line-height: 1.3;
+        }
+
+        .page-header__description {
+            margin-top: 4px;
+
+            color: var(--text-muted);
+
+            font-size: 13px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding: 0 16px;
+
+            border: 0;
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .button--primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button--primary:hover {
+            background: var(--primary-dark);
+        }
+
+
+        /* =========================
+           TABLE CARD
+        ========================= */
+        .table-card {
+            background: var(--surface);
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            width: 100%;
+
+            overflow-x: auto;
+
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table {
+            width: 100%;
+            min-width: 850px;
+
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 13px 14px;
+
+            border-bottom: 1px solid var(--border);
+
+            text-align: left;
+            white-space: nowrap;
+
+            font-size: 13px;
+        }
+
+        .table th {
+            background: #f8fafc;
+
+            color: var(--text-muted);
+
+            font-size: 12px;
+            font-weight: 600;
+
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .table__number {
+            width: 50px;
+
+            text-align: center !important;
+        }
+
+        .table__code {
+            color: var(--text-muted);
+
+            font-family: monospace;
+        }
+
+        .table__product {
+            font-weight: 500;
+        }
+
+        .table__price {
+            font-weight: 500;
+        }
+
+        .table__stock {
+            font-weight: 600;
+        }
+
+        .stock--safe {
+            color: #16a34a;
+        }
+
+        .stock--low {
+            color: var(--danger);
+        }
+
+
+        /* =========================
+           ACTION
+        ========================= */
+        .actions {
+            display: flex;
+            align-items: center;
+
+            gap: 7px;
+        }
+
+        .action-button {
+            min-width: 60px;
+            height: 34px;
+
+            padding: 0 10px;
+
+            border: 0;
+            border-radius: 6px;
+
+            color: white;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .action-button--edit {
+            background: var(--warning);
+        }
+
+        .action-button--edit:hover {
+            background: var(--warning-dark);
+        }
+
+        .action-button--delete {
+            background: var(--danger);
+        }
+
+        .action-button--delete:hover {
+            background: var(--danger-dark);
+        }
+
+
+        /* =========================
+           TABLE HINT
+        ========================= */
+        .table-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 14px;
+
+            border-top: 1px solid var(--border);
+
+            background: #f8fafc;
+
+            color: var(--text-muted);
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+        .footer {
+            padding: 20px 16px;
+
+            background: var(--surface);
+
+            border-top: 1px solid var(--border);
+
+            color: var(--text-muted);
+
+            text-align: center;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           TABLET
+        ========================= */
+        @media (min-width: 640px) {
+
+            .navbar {
+                padding: 0 24px;
+            }
+
+            .main {
+                padding: 28px 24px 40px;
+            }
+
+            .page-header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .page-header__title {
+                font-size: 24px;
+            }
+
+            .table th,
+            .table td {
+                padding: 14px 16px;
+            }
+
+            .footer {
+                padding: 22px 24px;
+            }
+        }
+
+
+        /* =========================
+           DESKTOP
+        ========================= */
+        @media (min-width: 1024px) {
+
+            .navbar {
+                height: 64px;
+
+                padding: 0 32px;
+            }
+
+            .main {
+                padding: 32px;
+            }
+
+            .table {
+                min-width: 0;
+            }
+
+            .table-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+    <nav class="navbar">
+
+        <a href="#" class="store-name">
+            Toko Makmur
+        </a>
+
+
+        <!-- Dropdown menu tanpa JavaScript -->
+        <details class="menu">
+
+            <summary class="menu__button" aria-label="Buka menu">
+
+                <span class="menu__icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+
+            </summary>
+
+
+            <div class="menu__dropdown">
+
+                <a href="#" class="menu__link">
+                    Dashboard
+                </a>
+
+                <a href="#" class="menu__link">
+                    Daftar Barang
+                </a>
+
+                <a href="#" class="menu__link">
+                    Transaksi
+                </a>
+
+                <a href="#" class="menu__link">
+                    Laporan
+                </a>
+
+                <a href="#" class="menu__link">
+                    Pengaturan
+                </a>
+
+                <div class="menu__divider"></div>
+
+                <a
+                    href="#"
+                    class="menu__link menu__link--danger"
+                >
+                    Keluar
+                </a>
+
+            </div>
+
+        </details>
+
+    </nav>
+
+
+    <!-- =========================
+         BODY
+    ========================= -->
+    <main class="main">
+
+        <header class="page-header">
+
+            <div>
+                <h1 class="page-header__title">
+                    Daftar Barang
+                </h1>
+
+                <p class="page-header__description">
+                    Kelola data barang yang tersedia di toko.
+                </p>
+            </div>
+
+            <a href="#" class="button button--primary">
+                + Tambah Barang
+            </a>
+
+        </header>
+
+
+        <!-- =========================
+             TABLE
+        ========================= -->
+        <section class="table-card">
+
+            <div class="table-scroll">
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th class="table__number">No</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Harga Beli</th>
+                            <th>Harga Jual</th>
+                            <th>Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td class="table__number">1</td>
+
+                            <td class="table__code">
+                                BRG001
+                            </td>
+
+                            <td class="table__product">
+                                Indomie Goreng
+                            </td>
+
+                            <td class="table__price">
+                                Rp2.500
+                            </td>
+
+                            <td class="table__price">
+                                Rp3.500
+                            </td>
+
+                            <td class="table__stock stock--safe">
+                                120
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--edit"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--delete"
+                                    >
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="table__number">2</td>
+
+                            <td class="table__code">
+                                BRG002
+                            </td>
+
+                            <td class="table__product">
+                                Aqua 600ml
+                            </td>
+
+                            <td class="table__price">
+                                Rp2.000
+                            </td>
+
+                            <td class="table__price">
+                                Rp3.000
+                            </td>
+
+                            <td class="table__stock stock--safe">
+                                85
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--edit"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--delete"
+                                    >
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="table__number">3</td>
+
+                            <td class="table__code">
+                                BRG003
+                            </td>
+
+                            <td class="table__product">
+                                Teh Botol Sosro
+                            </td>
+
+                            <td class="table__price">
+                                Rp3.000
+                            </td>
+
+                            <td class="table__price">
+                                Rp4.500
+                            </td>
+
+                            <td class="table__stock stock--low">
+                                8
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--edit"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--delete"
+                                    >
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="table__number">4</td>
+
+                            <td class="table__code">
+                                BRG004
+                            </td>
+
+                            <td class="table__product">
+                                Minyak Goreng 1L
+                            </td>
+
+                            <td class="table__price">
+                                Rp15.000
+                            </td>
+
+                            <td class="table__price">
+                                Rp18.000
+                            </td>
+
+                            <td class="table__stock stock--safe">
+                                45
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--edit"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--delete"
+                                    >
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="table__number">5</td>
+
+                            <td class="table__code">
+                                BRG005
+                            </td>
+
+                            <td class="table__product">
+                                Gula Pasir 1Kg
+                            </td>
+
+                            <td class="table__price">
+                                Rp14.000
+                            </td>
+
+                            <td class="table__price">
+                                Rp17.000
+                            </td>
+
+                            <td class="table__stock stock--low">
+                                5
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--edit"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="action-button action-button--delete"
+                                    >
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="table-hint">
+                Geser tabel ke kiri atau kanan untuk melihat kolom lainnya
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+    <footer class="footer">
+        © 2026 Toko Makmur. Semua hak dilindungi.
+    </footer>
+
+</body>
+</html>
