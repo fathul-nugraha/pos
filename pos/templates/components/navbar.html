@@ -1,199 +1,415 @@
 <style>
-    .navbar {
-        height: 60px;
+  /* ==================================================
+   NAVBAR VARIABLES
+================================================== */
 
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --sidebar: #111827;
+    --sidebar-hover: #1f2937;
+    --border: #e5e7eb;
+}
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
 
-        padding: 0 16px;
+/* ==================================================
+   DESKTOP SIDEBAR
+================================================== */
 
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    color: #fff;
+}
 
-    .store-name {
-        color: var(--primary);
 
-        font-size: 18px;
-        font-weight: 700;
+.brand {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
 
-        white-space: nowrap;
-    }
 
-    .menu {
-        position: relative;
-    }
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    border-radius: 10px;
+}
 
-    .menu__button {
-        width: 40px;
-        height: 40px;
 
-        border: 1px solid var(--border);
-        border-radius: 8px;
+.sidebar .nav-link {
+    color: #9ca3af;
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: all .2s ease;
+}
 
-        background: var(--surface);
-        color: var(--text);
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+.sidebar .nav-link:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+}
 
-        cursor: pointer;
-        list-style: none;
-    }
 
-    .menu__button::-webkit-details-marker {
-        display: none;
-    }
+.sidebar .nav-link.active {
+    background: var(--primary);
+    color: #fff;
+}
 
-    .menu__button::marker {
-        display: none;
-    }
 
-    .menu__icon {
-        width: 20px;
-        height: 14px;
+.sidebar .nav-link i {
+    width: 22px;
+    margin-right: 8px;
+}
 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
 
-    .menu__icon span {
-        display: block;
+.menu-title {
+    color: #6b7280;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 700;
+    margin: 22px 14px 8px;
+}
 
-        width: 100%;
-        height: 2px;
 
-        border-radius: 2px;
+/* ==================================================
+   TOPBAR
+================================================== */
 
-        background: currentColor;
-    }
+.topbar {
+    height: 70px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
 
-    .menu[open] .menu__button {
-        background: #f1f5f9;
-    }
 
-    .menu__dropdown {
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 0;
+.topbar-title {
+    font-size: .95rem;
+    font-weight: 600;
+}
 
-        width: 210px;
 
-        padding: 6px;
+/* ==================================================
+   AVATAR
+================================================== */
 
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 10px;
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #4338ca;
 
-        box-shadow:
-            0 10px 30px rgba(15, 23, 42, 0.10),
-            0 2px 8px rgba(15, 23, 42, 0.05);
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .menu__link {
-        display: flex;
-        align-items: center;
+    font-weight: 700;
+}
 
-        min-height: 42px;
 
-        padding: 0 12px;
+/* ==================================================
+   MOBILE OFFCANVAS
+================================================== */
 
-        border-radius: 7px;
+.offcanvas {
+    background: var(--sidebar);
+}
 
-        color: var(--text);
 
-        font-size: 14px;
-    }
+.offcanvas .nav-link {
+    color: #9ca3af;
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
 
-    .menu__link:hover {
-        background: #f1f5f9;
-    }
 
-    .menu__divider {
-        height: 1px;
+.offcanvas .nav-link:hover,
+.offcanvas .nav-link.active {
+    background: var(--primary);
+    color: #fff;
+}
 
-        margin: 6px 4px;
 
-        background: var(--border);
-    }
-
-    .menu__link--danger {
-        color: var(--danger);
-    }
-
-    .menu__link--danger:hover {
-        background: #fef2f2;
-    }
-
-    @media (min-width: 640px) {
-        .navbar {
-            padding: 0 24px;
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .navbar {
-            height: 64px;
-            padding: 0 32px;
-        }
-    }
+.offcanvas .nav-link i {
+    width: 22px;
+    margin-right: 8px;
+}
 </style>
+<!-- ==================================================
+     DESKTOP SIDEBAR
+================================================== -->
+
+<aside class="sidebar d-none d-lg-flex flex-column p-3">
+
+    <!-- BRAND -->
+    <div class="brand d-flex align-items-center gap-2 mb-4">
+
+        <span class="brand-icon">
+            <i class="bi bi-shop"></i>
+        </span>
+
+        POSKU
+
+    </div>
 
 
-<nav class="navbar">
+    <!-- MENU UTAMA -->
+    <div class="menu-title">
+        Menu Utama
+    </div>
 
-    <a href="#" class="store-name">
-        Toko Makmur
-    </a>
+    <nav class="nav flex-column">
 
-    <details class="menu">
+        <a href="#" class="nav-link active">
+            <i class="bi bi-grid"></i>
+            Dashboard
+        </a>
 
-        <summary class="menu__button" aria-label="Buka menu">
+        <a href="#" class="nav-link">
+            <i class="bi bi-box-seam"></i>
+            Master Barang
+        </a>
 
-            <span class="menu__icon">
-                <span></span>
-                <span></span>
-                <span></span>
+        <a href="#" class="nav-link">
+            <i class="bi bi-calculator"></i>
+            Kasir
+        </a>
+
+    </nav>
+
+
+    <!-- TRANSAKSI -->
+    <div class="menu-title">
+        Transaksi
+    </div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-cart-plus"></i>
+            Pembelian
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-cart-check"></i>
+            Penjualan
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-clipboard-check"></i>
+            Stock Opname
+        </a>
+
+    </nav>
+
+
+    <!-- LAPORAN -->
+    <div class="menu-title">
+        Laporan
+    </div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-file-earmark-bar-graph"></i>
+            Laporan Pembelian
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-file-earmark-text"></i>
+            Laporan Penjualan
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-boxes"></i>
+            Laporan Stok
+        </a>
+
+    </nav>
+
+
+    <!-- SISTEM -->
+    <div class="menu-title">
+        Sistem
+    </div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-people"></i>
+            Master Users
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-gear"></i>
+            Pengaturan
+        </a>
+
+    </nav>
+
+
+    <!-- LOGOUT -->
+    <div class="mt-auto pt-3 border-top border-secondary">
+
+        <a href="#" class="nav-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- ==================================================
+     MOBILE SIDEBAR / OFFCANVAS
+================================================== -->
+
+<div
+    class="offcanvas offcanvas-start"
+    tabindex="-1"
+    id="mobileSidebar"
+    aria-labelledby="mobileSidebarLabel"
+    style="width: 280px;"
+>
+
+    <!-- OFFCANVAS HEADER -->
+    <div class="offcanvas-header">
+
+        <div
+            class="brand d-flex align-items-center gap-2"
+            id="mobileSidebarLabel"
+        >
+
+            <span class="brand-icon">
+                <i class="bi bi-shop"></i>
             </span>
 
-        </summary>
-
-        <div class="menu__dropdown">
-
-            <a href="#" class="menu__link">
-                Dashboard
-            </a>
-
-            <a href="#" class="menu__link">
-                Daftar Barang
-            </a>
-
-            <a href="#" class="menu__link">
-                Kasir
-            </a>
-            <a href="#" class="menu__link">
-                Gudang
-            </a>
-
-            <a href="#" class="menu__link">
-                Laporan
-            </a>
-
-            <div class="menu__divider"></div>
-
-            <a href="#" class="menu__link menu__link--danger">
-                Keluar
-            </a>
+            POSKU
 
         </div>
 
-    </details>
+        <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        ></button>
 
-</nav>
+    </div>
+
+
+    <!-- OFFCANVAS BODY -->
+    <div class="offcanvas-body">
+
+        <!-- MENU UTAMA -->
+        <div class="menu-title">
+            Menu Utama
+        </div>
+
+        <nav class="nav flex-column">
+
+            <a href="{% url 'core:index'%}" class="nav-link active">
+                <i class="bi bi-grid"></i>
+                Dashboard
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-box-seam"></i>
+                Master Barang
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-calculator"></i>
+                Kasir
+            </a>
+
+        </nav>
+
+
+        <!-- TRANSAKSI -->
+        <div class="menu-title">
+            Transaksi
+        </div>
+
+        <nav class="nav flex-column">
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-cart-plus"></i>
+                Pembelian
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-cart-check"></i>
+                Penjualan
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-clipboard-check"></i>
+                Stock Opname
+            </a>
+
+        </nav>
+
+
+        <!-- LAPORAN -->
+        <div class="menu-title">
+            Laporan
+        </div>
+
+        <nav class="nav flex-column">
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+                Laporan Pembelian
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-file-earmark-text"></i>
+                Laporan Penjualan
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-boxes"></i>
+                Laporan Stok
+            </a>
+
+        </nav>
+
+
+        <!-- SISTEM -->
+        <div class="menu-title">
+            Sistem
+        </div>
+
+        <nav class="nav flex-column">
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-people"></i>
+                Master Users
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-gear"></i>
+                Pengaturan
+            </a>
+
+            <a href="#" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+
+        </nav>
+
+    </div>
+
+</div>
