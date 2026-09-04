@@ -169,7 +169,7 @@
 
     <nav class="nav flex-column">
 
-        <a href="#" class="nav-link active">
+        <a href="#" class="nav-link">
             <i class="bi bi-grid"></i>
             Dashboard
         </a>
@@ -318,12 +318,12 @@
 
         <nav class="nav flex-column">
 
-            <a href="{% url 'core:index'%}" class="nav-link active">
+            <a href="{% url 'core:index'%}" class="nav-link">
                 <i class="bi bi-grid"></i>
                 Dashboard
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="{% url 'barang:index' %}" class="nav-link">
                 <i class="bi bi-box-seam"></i>
                 Master Barang
             </a>
